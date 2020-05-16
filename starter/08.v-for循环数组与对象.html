@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src = "./lib/vue.js"></script>
+
+  
+</head>
+<body>
+    
+    <div id="app">
+        <!-- 通过v-for循环list普通数组 -->
+        <p v-for="(item,i) in list">{{item}}++{{i}}</p>
+
+        <!-- 通过v-for循环list对象数组 -->
+        <p v-for="(obj,i) in list2">{{obj.id}} --- {{obj.name}} ++{{i}}</p>
+
+        <!-- 通过v-for遍历对象属性-->
+        <p v-for="(val,key,i) in user">{{val}}---{{key}} ++{{i}}</p>
+
+        <!--通过v-for 迭代数字，从1开始-->
+        <p v-for="count in 10"> 这是第 {{count}} 次循环</p>
+
+
+        <!-- 当使用组件与v-for结合时，如下面的checkbox和遍历结合，需要指定key，否则会出现checkbox选定错误的情况 -->
+        <div>
+            <label> ID:
+                <input type="text" v-model="id"> 
+            </label>
+
+            <label> NAME:
+                <input type="text" v-model="name"> 
+            </label>
+
+            <input type="button" value="add" @click="add">
+
+            <!-- key 指定为字符串或者数字类型，不可以是一个对象,并且需要v-bind绑定 -->
+            <p v-for="obj in list2" :key="obj.id"> 
+                <input type="checkbox" > {{obj.id}} --- {{obj.name}}
+            </p>
+        </div>
+    </div>
+
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                list: [1,2,3,4,5,6],
+                list2: [
+                    {id:1,name:'aa1'},
+                    {id:2,name:'aa2'},
+                    {id:3,name:'aa3'},
+                    {id:4,name:'aa4'},
+                    {id:5,name:'aa5'}
+                ],
+                user:{
+                    id:1,
+                    name:'depp',
+                    gender:'male'
+                },
+                id: '',
+                name: '',
+            },
+            methods: {
+                // 往list中添加元素
+                add(){
+                    this.list2.push({id:this.id,name:this.name})
+                }
+            }
+        })
+    </script>
+</body>
+</html>

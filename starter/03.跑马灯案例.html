@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src = "./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="浪起来" @click="lang">
+        <input type="button" value="低调" @click="stop">
+        
+        <h4>{{msg}}</h4>
+    </div>
+    
+    <script>
+        // VM实例会监听自己data中所有数据的改变，只要数据发送变化，就会自动把最新的数据从data上同步到页面中去
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '稳住，能赢！！',
+                intervalId: null //定义一个全局变量
+            },
+            methods: {
+                // lang方法，1.拿到msg字符串；2.substring截取并重新拼接；3.定时器自动截取
+                lang(){
+                    // 防止多次点击按钮，重复开启多个定时器
+                    if(this.intervalId!=null) return
+
+                    // => 箭头函数解决this的指向问题，函数外部的this和内部的this指向一致
+                    // setInterval定时器，每400ms运行一次
+                    this.intervalId = setInterval( () => {
+                        // 用this访问当前vue对象的属性或方法
+                        var start = this.msg.substring(0,1)
+                        var end = this.msg.substring(1)
+                        this.msg = end+start
+                    },400)
+                },
+                stop(){
+                    //停止定时器
+                    clearInterval(this.intervalId)
+                    // 确保停止以后还可以再次开启
+                    this.intervalId = null
+                }
+            }
+        })
+    </script>
+</body>
+</html>

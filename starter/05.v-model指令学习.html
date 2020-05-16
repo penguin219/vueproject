@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src = "./lib/vue.js"></script>
+  
+</head>
+<body>
+    <div id="app">
+        <h4>{{msg}}</h4>
+
+        <!-- v-bind 只能实现数据的单向绑定，从M 到V -->
+        <input type="text" v-bind:value="msg">
+
+        <!-- v-model 能实现数据的双向绑定，只能用于表单元素，从V 到M ，也就是在页面中修改V中表单栏，h4标题会同步变化 -->
+        <input type="text" v-model="msg">
+    </div>
+
+    
+    
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello johnny!'
+            },
+            methods: {
+            }
+        })
+    </script>
+</body>
+</html>

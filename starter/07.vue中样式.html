@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src = "./lib/vue.js"></script>
+
+    <style>
+        .red {
+            color: red;
+        }
+
+        .thin {
+            font-weight: 200;
+        }
+
+        .italic {
+            font-style:italic;
+        }
+
+        .active {
+            letter-spacing: 0.5em;
+        }
+    </style>
+  
+</head>
+<body>
+    <!-- class 样式-->
+    <div id="app">
+        <!-- 传递一个数组，注意格式，['class1'，‘class2’]-->
+        <h1 v-bind:class="['red','italic']">h1</h1>
+
+        <!-- 数组中使用三元表达式-->
+        <h1 :class="[flag ? 'active' : '']">h2</h1>
+
+        <!-- 数组中使用三元表达式的另一种形式，对象形式{'class',flag}，若flag为true则应用这个类-->
+        <h1 :class="[{'active':flag}]">h3</h1>
+
+        <!-- 直接使用对象,对象属性可带引号，可不带 -->
+        <h1 :class="{'active':true,red:true}">h4</h1>
+
+        <!--将对象保存为classObj-->
+        <h1 :class="classObj">h5</h1>
+    </div>
+
+    <p>style</p>
+
+    <!-- style 样式-->
+    <div id="app2">
+        <!-- 对象形式，也可以单独在vm的data中声明，带-的属性名需要加'' -->
+        <h1 :style="{color:'red', 'font-weight':200}">h1</h1>
+
+        <!-- 数组多个对象组合-->
+        <h1 :style="[obj1,obj2]">h2</h1>
+
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+              flag: true,
+              classObj: {'active':true,red:true}
+            },
+            methods: {
+               
+            }
+        })
+
+        var vm2 = new Vue({
+            el: '#app2',
+            data: {
+              obj1: {color:'red'},
+              obj2: {'font-weight':1000}
+            },
+            methods: {
+               
+            }
+        })
+    </script>
+</body>
+</html>

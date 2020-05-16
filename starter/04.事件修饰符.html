@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src = "./lib/vue.js"></script>
+
+    <style>
+        .inner{
+            height: 150px;
+            background-color: pink;
+
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- .stop 取消冒泡，冒泡是指存在元素嵌套时，先触发btn再触发div，取消冒泡就只触发btn-->
+        <div class="inner" @click="divHandler">
+            <input type="button" value="戳一戳" @click.stop="btnHandler"> 
+        </div>
+        
+        <!-- .prevent 阻止默认行为，比如a标签默认跳转行为，可以通过prevent阻止跳转-->
+        <a href="http://www.baidu.com" @click.prevent="linkClick">baidu</a>
+
+        <!-- .capture 捕获事件触发机制，从外到里，先触发div再触发btn-->
+        <div class="inner" @click.capture="divHandler">
+            <input type="button" value="戳一戳" @click="btnHandler"> 
+        </div>
+
+        <!-- .self 只有点击本身才会触发事件-->
+        <div class="inner" @click.self="divHandler">
+            <input type="button" value="戳一戳" @click="btnHandler"> 
+        </div>
+
+        <!-- .once 事件只触发一次 ,只阻止一次prevent，事件修饰符可以串联 -->
+        <a href="http://www.baidu.com" @click.prevent.once="linkClick">baidu</a>
+
+        
+    </div>
+    
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                
+            },
+            methods: {
+                divHandler(){
+                    console.log('divHandler')
+                },
+                btnHandler(){
+                    console.log('btnHandler')
+                },
+                linkClick(){
+                    console.log('linkClick')
+                }
+            }
+        })
+    </script>
+</body>
+</html>
