@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <script src="./lib/vue-resource-1.5.1.js"></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <!-- 用vue-resource发起GET，POST和Jsonp请求 -->
+    <div id='app'>
+        <input type="button" value="get" @click="getInfo">
+        <input type="button" value="post" @click="postInfo">
+        <input type="button" value="jsonp" @click="jsonpInfo">
+    </div>
+
+    <!-- 接口API ： http://jsonplaceholder.typicode.com/guide.html -->
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {
+                getInfo(){
+                    // 发起get请求后，通过.then设置回调函数
+                    this.$http.get('https://cn.vuejs.org/').then(function(result){
+                        console.log(result)
+                    })
+                },
+                postInfo(){
+                    this.$http.post('https://jsonplaceholder.typicode.com/posts',{} , {emulateJSON: true}).then(function(result){
+                        console.log(result.body)
+                    })
+                },
+                jsonpInfo(){
+                    this.$http.jsonp('https://www.baidu.com').then(function(result){
+                        console.log(result.body)
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+</html>
