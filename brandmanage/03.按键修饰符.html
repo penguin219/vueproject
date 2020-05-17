@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+        
+        <div class="panel panel-primary">
+            
+            <div class="panel-body form-inline">
+                
+                <label>
+                    <!-- keyup.enter 键盘输入后点了回车就触发add事件-->
+                    <!-- 提供的按键别名有： enter ，tab，delete，esc，space，up，down，left，right，也可以用键盘码 F2-113（keyup.113）-->
+                    <!-- 但是键盘码可读性较差，因此可自定义全局修饰符
+                         Vue.congif.keyCodes.f2 = 113
+                         @keyup.f2=add
+                    -->
+                    Name:<input type="text" class="form-control" v-model="name" @keyup.enter="add">
+                </label>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>

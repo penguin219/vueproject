@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+
+        <!-- 当存在同门的全局和局部过滤器时，就近原则，选用局部过滤器 -->
+        <p>{{dt | dateFormat}}</p>
+    </div>
+    <script>
+         // vue全局过滤器的定义,(过滤器名称，处理函数，参数为需要过滤的数据)，放在前面！
+        Vue.filter('date',function(data,pattern=""){
+            // 根据给定的时间字符串，得到特定的时间
+            var dt = new Date(data)
+
+            // yyyy-mm-dd
+            var y = dt.getFullYear()
+            var m = dt.getMonth()+1  //月从0开始
+            var d = dt.getDate()
+
+            if(pattern.toLowerCase() == 'yyyy-mm-dd'){
+                return `${y}-${m}-${d}`
+            }else{
+                var hh = dt.getHours()
+                var mm = dt.getMinutes()
+                var ss = dt.getSeconds()
+                return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+            }
+        });
+        
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                dt: new Date()
+            },
+            methods: {
+            },
+            filters:{ // 私有(局部)过滤器
+                dateFormat:function(data,pattern=""){
+                    // 根据给定的时间字符串，得到特定的时间
+                    var dt = new Date(data)
+
+                    // yyyy-mm-dd
+                    var y = dt.getFullYear()
+                    var m = dt.getMonth()+1  //月从0开始
+                    var d = dt.getDate()
+
+                    if(pattern.toLowerCase() == 'yyyy-mm-dd'){
+                        return `${y}-${m}-${d}`
+                    }else{
+                        var hh = dt.getHours()
+                        var mm = dt.getMinutes()
+                        var ss = dt.getSeconds()
+                        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

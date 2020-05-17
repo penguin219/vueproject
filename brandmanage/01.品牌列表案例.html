@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">添加品牌</h3>
+            </div>
+            <div class="panel-body form-inline">
+                <!-- 在vue中，使用v-model实现了数据的双向绑定，当修改了data中的数据，vue会默认监听到数据的改动，自动把最新的数据应用到页面上 -->
+                <label>
+                    Id:<input type="text" class="form-control" v-model="id">
+                </label>
+                <label>
+                    <!-- keyup.enter 键盘输入后点了回车就触发add事件-->
+                    <!-- 提供的按键别名有： enter ，tab，delete，esc，space，up，down，left，right，也可以用键盘码 F2-113（keyup.113）-->
+                    <!-- 但是键盘码可读性较差，因此可自定义全局修饰符
+                         Vue.congif.keyCodes.f2 = 113
+                         @keyup.f2=add
+                    -->
+                    Name:<input type="text" class="form-control" v-model="name" @keyup.enter="add">
+                </label>
+                <input type="button" value="添加" class="btn btn-primary" @click="add">
+
+                <label>
+                    <!-- 自定义指令的应用，focus是自动聚焦于搜索框，color是改变颜色-->
+                    <!-- 注意：这里的 "'blue'" 如果是"blue" 那么传递的是一个变量，加单引号传递的是一个字符串-->
+                    搜索名称关键字:<input type="text" class="form-control" v-model="keywords" v-focus v-color="'blue'">
+                </label>
+            </div>
+        </div>
+        
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 由于通过搜索框下方列表要显示对应的list，所以这里的循环不能写死，用方法搜索关键字 -->
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td v-text="item.name">{{item.name}}</td>
+
+                    <td>
+                        <!-- 通过管道使用过滤器处理数据，可传递多个参数 -->
+                        {{item.ctime | date('yyyy-mm-dd')}}
+
+                        <!-- 过滤器可以多个连续调用-->
+                        <!-- {{item.ctime | date('111') | date('111')}} -->
+
+                    </td>
+
+                    <!-- 根据ID删除这条数据 -->
+                    <td><a href="" @click.prevent="del(item.id)">删除</a></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>
+    <script>
+
+        // Vue自定义共有指令 
+        // 参数一是指令名称，在定义时候不需要加v-，调用必须加
+        // 参数二是个对象，是指令相关的钩子函数，在特定的阶段，执行相关的操作
+        // 每个钩子函数的第一参数为el，表示被绑定了指令的那个元素，是原生的JS对象
+        // 第二个参数为binding，binding.name是指令的名称，binging.value是赋值表达式的值"1+1" -> 2，binging.value是字符串"1+1" ->"1+1" 
+
+        /*
+        这里涉及到了页面元素的一个解析过程
+        当浏览器加载页面，将代码中的元素加载到内存中时，这属于bind过程 -样式操作
+        当浏览器渲染页面，将内存中的元素渲染到页面中时，这属于inserted过程 -JS行为相关操作
+        */
+        Vue.directive('focus',{
+            //当指令绑定到某各元素上时，执行这个函数，只执行一次
+            bind:function(el){
+                
+            },
+
+            // 元素插入到DOM中执行，只执行一次
+            inserted:function(el){
+                el.focus()
+            },
+
+            // 当更新时执行，可能触发多次
+            updated:function(){}
+        })
+
+        Vue.directive('color',{
+            //binding
+            bind:function(el,binding){
+                // 设置字体颜色为红 color = 'red'
+                // 设置样式不需要关系元素是否插入DOM树，而聚焦功能只有在插入DOM树后才可以聚焦
+                console.log(binding.value,binding.expression) // blue 'blue'
+                el.style.color = binding.value
+                
+            },
+        })
+
+
+         // vue全局过滤器的定义,(过滤器名称，处理函数，参数为需要过滤的数据)，放在前面！
+        Vue.filter('date',function(data,pattern=""){
+            // 根据给定的时间字符串，得到特定的时间
+            var dt = new Date(data)
+
+            // yyyy-mm-dd
+            var y = dt.getFullYear()
+            var m = dt.getMonth()+1  //月从0开始
+            var d = dt.getDate()
+
+            //字符串填充，padStart
+            m = m.toString().padStart(2,'0')
+            d = d.toString().padStart(2,'0')
+
+            if(pattern.toLowerCase() == 'yyyy-mm-dd'){
+                return `${y}-${m}-${d}`
+            }else{
+                var hh = dt.getHours()
+                var mm = dt.getMinutes()
+                var ss = dt.getSeconds()
+                return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+            }
+        });
+        
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                id: '',
+                name: '',
+                keywords: '',
+                list: [
+                    {id:1,name:'chanel',ctime:new Date()},
+                    {id:2,name:'guci',ctime:new Date()},
+                ]
+            },
+            methods: {
+                add(){
+                    this.list.push({id:this.id,name:this.name,ctime:new Date()})
+                    // 清空搜索框中的内容
+                    this.id=this.name=''
+                },
+                del(id){
+                    // 如何根据ID找到要删除的数据，如果是数据库中的数据，可直接传id，现在不是需要删除假数据
+                    // 1. 在数组的same方法中，如果return true，就会立即终止这个数组的循环
+                    // this.list.some( (item,i) => {
+                    //     if(item.id == id){
+                    //         //splice函数从索引为i的位置开始删除1个元素
+                    //         this.list.splice(i,1);
+                    //         return true;
+                    //     }
+                    // })
+
+                    //2.findIndex专门查找索引
+                    var index = this.list.findIndex(item => {
+                        if(item.id == id){
+                            return true;
+                        }
+                    })
+                    this.list.splice(index,1);
+                },
+                search(keywords){
+                    var newList = []
+                    // 1.用foreach
+                    // this.list.forEach(item => {
+                    //     // 不等于-1代表，item中包含keywords
+                    //     if(item.name.indexOf(keywords) != -1){
+                    //         newList.push(item)
+                    //     }
+                    // })
+
+                    // 2.用过滤器
+                    newList = this.list.filter(item => {
+                        //includes判断是否包含关键字
+                        if(item.name.includes(keywords)){
+                            return item
+                        }
+                    })
+
+                    return newList
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

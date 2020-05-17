@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+
+    <div id="app">
+        <label>
+            <!-- 自定义指令的应用，focus是自动聚焦于搜索框，color是改变颜色-->
+            <!-- 注意：这里的 "'blue'" 如果是"blue" 那么传递的是一个变量，加单引号传递的是一个字符串-->
+            搜索名称关键字:<input type="text" class="form-control" v-focus v-color="'blue'" v-fontweight="2000">
+            <p v-fontweight="20" v-fontsize="50">hello</p>
+        </label>
+    </div>
+   
+    <script>
+
+        // Vue自定义共有指令 
+        // 参数一是指令名称，在定义时候不需要加v-，调用必须加
+        // 参数二是个对象，是指令相关的钩子函数，在特定的阶段，执行相关的操作
+        // 每个钩子函数的第一参数为el，表示被绑定了指令的那个元素，是原生的JS对象
+        // 第二个参数为binding，binding.name是指令的名称，binging.value是赋值表达式的值"1+1" -> 2，binging.value是字符串"1+1" ->"1+1" 
+
+        /*
+        这里涉及到了页面元素的一个解析过程
+        当浏览器加载页面，将代码中的元素加载到内存中时，这属于bind过程 -样式操作
+        当浏览器渲染页面，将内存中的元素渲染到页面中时，这属于inserted过程 -JS行为相关操作
+        */
+        Vue.directive('focus',{
+            //当指令绑定到某各元素上时，执行这个函数，只执行一次
+            bind:function(el){
+                
+            },
+
+            // 元素插入到DOM中执行，只执行一次
+            inserted:function(el){
+                el.focus()
+            },
+
+            // 当更新时执行，可能触发多次
+            updated:function(){}
+        })
+
+        Vue.directive('color',{
+            //binding
+            bind:function(el,binding){
+                // 设置字体颜色为红 color = 'red'
+                // 设置样式不需要关系元素是否插入DOM树，而聚焦功能只有在插入DOM树后才可以聚焦
+                console.log(binding.value,binding.expression) // blue 'blue'
+                el.style.color = binding.value
+                
+            },
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            //自定义私有指令
+            directives: {
+                'fontweight':{
+                    bind:function(el,binding){
+                        el.style.fontWeight = binding.value
+                    }
+                },
+                //函数简写
+                'fontsize':function(el,binding){
+                    el.style.fontSize = parseInt(binding.value)+'px'
+                }               
+            }
+        })
+
+    </script>
+</body>
+</html>
