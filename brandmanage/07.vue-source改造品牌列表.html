@@ -61,6 +61,8 @@
 
         // 可以设置全局的访问数据域名，在下面请求中，不带"/"开始的就会自动使用全局域名，带的使用本地
         Vue.http.options.root = 'https://jsonplaceholder.typicode.com'
+        // 也可以全局启用emulateJSON选项 ,下面就不用再写了
+        Vue.http.options.emulateJSON = true
 
         var vm = new Vue({
             el: '#app',

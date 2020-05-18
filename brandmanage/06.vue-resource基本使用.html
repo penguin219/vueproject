@@ -29,6 +29,9 @@
                     })
                 },
                 postInfo(){
+                    //第一个参数：请求url地址
+                    //第二个参数：要提交给服务器的数据，以对象的形式提交
+                    //第三个参数：是一个配置对象，以哪种表单数据类型提交
                     this.$http.post('https://jsonplaceholder.typicode.com/posts',{} , {emulateJSON: true}).then(function(result){
                         console.log(result.body)
                     })
