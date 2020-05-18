@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <script src="./lib/vue-resource-1.5.1.js"></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+
+<!-- 
+    01.品牌项目时在vue实例中缓存的数据，但是在实际开发中，数据都来自数据库
+    vue-source可以通过http请求从接口API中获取数据
+    接口API就是后端提供了功能模块，像springboot中微服务的定义的GET,POST接口一样
+-->
+<body>
+    <div id='app'>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">添加品牌</h3>
+            </div>
+            <div class="panel-body form-inline">    
+                <label>
+                    userID:<input type="text" class="form-control" v-model="userId">
+                </label>
+                <label>
+                    title:<input type="text" class="form-control" v-model="title">
+                </label>
+                <label>
+                    body:<input type="text" class="form-control" v-model="body">
+                </label>
+                <input type="button" value="添加" class="btn btn-primary" @click="add">
+            </div>
+        </div>
+        
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>userId</th>
+                    <th>title</th>
+                    <th>body</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.userId}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.body}}</td>
+                    <td><a href="" @click.prevent="del(item.id)">删除</a></td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <script>
+
+        // 可以设置全局的访问数据域名，在下面请求中，不带"/"开始的就会自动使用全局域名，带的使用本地
+        Vue.http.options.root = 'https://jsonplaceholder.typicode.com'
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                userId: '',
+                title: '',
+                body: '',
+                list: [
+                    
+                ]
+            },
+            methods: {
+                add(){ //往数据库中添加数据
+                    this.$http.post('https://jsonplaceholder.typicode.com/posts',{userId:this.userId,title:this.title,body:this.body},{emulateJSON: true}).then(result => {
+                        if(result.status == 201){
+                            console.log(result.body)
+                            this.list.push(result.body)
+                            // 这里讲道理是调用下面这个函数，获取所有的数据，但是提供接口不会把数据真的插入数据库，为了显示手动加入list
+                            // this.getAllList()
+                        }else{
+                            alert('插入数据失败')
+                        }
+                    })
+                },
+                del(id){
+                    var index = this.list.findIndex(item => {
+                        if(item.id == id){
+                            return true;
+                        }
+                    })
+                    this.list.splice(index,1);
+                },
+                getAllList(){ // 从数据库获取所有的类别
+                    this.$http.get('posts/').then(result =>{
+                        if(result.status == 200){
+                            this.list = result.body
+                        }else{
+                            alert('获取数据失败')
+                        }
+                    })
+                }
+            },
+            created(){
+                this.getAllList()
+            }
+        })
+    </script>
+</body>
+</html>
