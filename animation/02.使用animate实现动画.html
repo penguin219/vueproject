@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+    <link rel="stylesheet" href='./lib/animate.min.css'>
+</head>
+<body>
+    <div id='app'>
+        <input type="button" value="toggle" @click="flag=!flag">
+
+        <!-- duration指入场时间和出场时间 -->
+        <!-- :duration="{enter:200,leave:100}" 分别设置入场和离场时间   -->
+        <transition enter-active-class="animate__bounceIn" leave-active-class="animate__bounceOut" :duration="200">
+            <h3 v-if="flag">hello</h3>
+        </transition>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                flag:false
+            },
+            methods: {}
+        })
+    </script>
+</body>
+</html>

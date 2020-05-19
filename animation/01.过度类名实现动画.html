@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+
+    <style>
+        /* 进入之前元素状态，和离开以后的状态 */
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            /* 提供一个X轴的位移，这样出现的时候就有向左闪动的效果  */
+            transform: translateX(100px); 
+        }
+
+        /* 进入以后和离开之前的状态*/
+        .v-enter-active,
+        .v-leave-active{
+            /* 哪些元素需要过度，过度时长，过度效果*/
+            transition: all 0.8s ease;
+        }
+
+        /* 进入之前元素状态，和离开以后的状态 */
+        .my-enter,
+        .my-leave-to{
+            opacity: 0;
+            /* 提供一个X轴的位移，这样出现的时候就有向左闪动的效果  */
+            transform: translateX(20px); 
+        }
+
+        /* 进入以后和离开之前的状态*/
+        .my-enter-active,
+        .my-leave-active{
+            /* 哪些元素需要过度，过度时长，过度效果*/
+            transition: all 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id='app'>
+        
+        <input type="button" value="toggle" @click="flag=!flag">
+
+        <!-- 使用transition 元素，将需要被vue动画控制的元素包裹起来-->
+        <!-- name表示动画元素前的标签，默认是v-，现在是my- -->
+        <transition>
+            <h3 v-if="flag">hello</h3>
+        </transition>
+        <transition name="my">
+            <h3 v-if="flag">hi</h3>
+        </transition>
+        
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                flag: false
+            },
+            methods: {}
+        })
+    </script>
+</body>
+</html>
