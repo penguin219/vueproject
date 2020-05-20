@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+        <!-- 通过ref属性定义 -->
+        <h3 ref="myh3" @click="getElement">hhhh</h3>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {
+                getElement(){
+                    // 通过refs来获取,等同于document.getElementById('myh3')
+                    console.log(this.$refs.myh3.innerText)
+                }
+            }
+        })
+    </script>
+</body>
+</html>

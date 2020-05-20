@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+        <mycom1></mycom1>
+        <counter></counter>
+    </div>
+    <template id="tmp1">
+        <div>
+            <input type="button" value="+1" @click="increment">
+            <p>{{count}}</p>
+        </div>
+    </template>
+    <script>
+        Vue.component('mycom1',Vue.extend({
+            template: '<h3>Vue.extend2 -- {{msg}} -- </h3>',
+            // 组件中也可有data，data是一个函数，必须返回一个对象
+            // 组件中data数据使用方式和实例中data的使用方式一致
+            data: function(){
+                return {
+                    msg: '这是组件中的data'
+                }
+            }
+        }))
+
+        // 计数器模板
+        Vue.component('counter',Vue.extend({
+            template: '#tmp1',
+            data: function(){
+                return  {count : 0}
+            },
+            methods: {
+                increment(){
+                    this.count++
+                }
+            }
+        }))
+
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {}
+        })
+    </script>
+</body>
+</html>

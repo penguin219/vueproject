@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+        <!-- 使用组件,注意名称在script定义时可以使用驼峰，但是这里使用需要改为- ,如果没有使用驼峰不需要更改 -->
+        <my-com1></my-com1>
+        <mycom1></mycom1>
+        <mycom2></mycom2>
+
+        <mycom3></mycom3>
+        
+    </div>
+
+    <!-- 在被控制的#app外面，使用template元素，定义组件的HTML模板结构 -->
+    <template id="tmp1">
+        <div>
+            <h1>template</h1>
+        </div>
+    </template>
+
+    <script>
+        // 方法一
+        // 使用vue.extend创建全局组件
+        var com1 = Vue.extend({
+            // 通过template属性，指定组件的HTML结构,只能有一个根标签元素
+            template: '<h3>Vue.extend</h3>' 
+        })
+        // 使用component（定义组件的名称，创建出来的组件模板对象）
+        Vue.component('myCom1',com1)
+
+
+        // 方法二
+        Vue.component('mycom1',Vue.extend({
+            template: '<h3>Vue.extend2</h3>'
+        }))
+
+        // 方法三
+        Vue.component('mycom2',{
+            template: '<h3>Vue.extend3</h3>'
+        })
+
+        // 方法四
+        Vue.component('mycom3',{
+            template: '#tmp1'
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {}
+        })
+
+    </script>
+</body>
+</html>

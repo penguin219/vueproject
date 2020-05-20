@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+
+        <!-- 切换方式一： 使用flag控制两个组件的出现，true则出现login，false则出现register-->
+        <!-- <a href="" @click.prevent="flag=true">login</a>
+        <a href="" @click.prevent="flag=false">register</a>
+
+        <login v-if="flag"></login>
+        <register v-else="flag"></register> -->
+
+        <!-- 切换方式二 Vue提供component实现组件切换,is属性用于指定组件名称,需要加'' -->
+        <a href="" @click.prevent="comName='login'">login</a>
+        <a href="" @click.prevent="comName='register'">register</a>
+        <component :is="comName"></component>
+        
+    </div>
+    <script>
+
+        Vue.component('login',{
+            template: '<h3>login</h3>'
+        })
+
+        Vue.component('register',{
+            template: '<h3>register</h3>'
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                comName: 'login',
+                flag: true
+            },
+            methods: {}
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+        <login></login>
+        
+    </div>
+
+    <!-- 在被控制的#app外面，使用template元素，定义组件的HTML模板结构 -->
+    <template id="tmp1">
+        <div>
+            <h1>template</h1>
+        </div>
+    </template>
+
+    <script>
+
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+            filters:{},
+            directives:{},
+            components:{ // 定义实例私有的组件
+                login:{
+                    template: '#tmp1'
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

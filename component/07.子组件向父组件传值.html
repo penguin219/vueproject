@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+</head>
+<body>
+    <div id='app'>
+
+        <!-- 通过函数参数，从子组件向父组件传递值 -->
+        <com2 v-on:myfunc="show"></com2>
+    </div>
+
+    <template id="tmp1">
+        <div>
+            <h1>这是子组件</h1>
+            <input type="button" value="这是子组件中的按钮，点击它，触发父组件传递过来的func方法" @click="myclick">
+        </div>
+    </template>
+    
+    <script>
+
+        var com2 = {
+            template: '#tmp1',
+            data(){
+                return{
+                    com2msg:'com2-data'
+                }
+            },
+            methods:{
+                myclick(){
+                    //通过emit触发父组件的方法,从第二个参数开始传递参数
+                    this.$emit('myfunc',this.com2msg);
+                }
+            }
+        }
+
+        // vm实例也属于一个组件
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '123 父组件中的数据',
+                fromcom2:''
+            },
+            methods: {
+                show(data){
+                    // 接收参数，从而实现从子组件向父组件传值
+                    this.fromcom2 = data
+                    console.log('调用了父组件的show方法'+data)
+                }
+            },
+            components:{
+
+                //子组件 com2
+                com2
+            }
+        })
+    </script>
+</body>
+</html>
