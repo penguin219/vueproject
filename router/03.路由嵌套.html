@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=<device-width>, initial-scale=1.0'>
+    <title>Document</title>
+    <script src='./lib/vue-2.4.0.js'></script>
+    <link rel='stylesheet' href='./lib/bootstrap-3.3.7.css'>
+    <script src="./lib/vue-router-3.2.0.js"></script>
+</head>
+<body>
+    <div id='app'>
+
+        <router-link to="/account">Account</router-link>
+
+        <router-view></router-view>
+    </div>
+
+    <template id="tmp1">
+        <div>
+            <h1>这是account父组件</h1>
+            <router-link to="/account/login">登录</router-link>
+            <router-link to="/account/register">注册</router-link>
+            <!-- 嵌套子路由组件 -->
+            <router-view></router-view>
+        </div>
+    </template>
+
+    <script>
+
+        var account = {
+            template: '#tmp1'
+        }
+        var login = {
+            template: '<h1>login!</h1>'
+        }
+        var register = {
+            template: '<h1>register!</h1>'
+        }
+
+        var router = new VueRouter({
+            routes:[ 
+                {
+                    path:'/account' ,
+                    component:account,
+                    // 子路由注册方式二 ,path前不带“/”，带了不会和父亲路径拼接，而是直接匹配根目录
+                    children:[
+                        {path: 'login' ,component:login},
+                        {path: 'register',component:register}
+                    ]
+                },
+
+                // 子路由注册方式一 ，这种方式嵌套的router-view不起作用，也就是页面会实现跳转，而不是子组件出现于父组件的下方
+                // {path: '/account/login' ,component:login},
+                // {path: '/account/register',component:register}
+            ]
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+            router: router
+        })
+    </script>
+</body>
+</html>
